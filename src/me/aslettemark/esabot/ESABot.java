@@ -1,11 +1,9 @@
 package me.aslettemark.esabot;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
-import org.jibble.pircbot.IrcException;
-import org.jibble.pircbot.NickAlreadyInUseException;
 import org.jibble.pircbot.PircBot;
+import org.jibble.pircbot.PircUser;
 
 public class ESABot extends PircBot {
 	
@@ -16,6 +14,7 @@ public class ESABot extends PircBot {
 	
 	public ArrayList<String> herders = new ArrayList<String>();
 	public ArrayList<String> herdpass = new ArrayList<String>();
+	public ArrayList<String> ops = new ArrayList<String>();
 	
 	public IRCHandler handler;
 	
@@ -27,7 +26,7 @@ public class ESABot extends PircBot {
 		
 		this.setName(nick);
 		this.setVersion("ESABot v13.3 BUILD 7");
-		this.doConnect();
+		this.handler.doConnect();
 		
 		this.channels = args[3].split(",");
 		for(String c: this.channels) {
@@ -45,7 +44,17 @@ public class ESABot extends PircBot {
 		} else if(message.startsWith(".")) {
 			handler.command(channel, sender, login, hostname, message.replaceFirst(".", ""), false);
 		}
-		System.out.printf("%s %s %s %s %s %s \n", channel, sender, login, hostname, message, (handler.isOp(nick, channel))?"true":"false" );
+		
+		//debug section/construction zone
+		String op = "false";
+		String herd = "false";
+		//if(handler.isOp(sender, channel)) {
+		//	op = "true";
+		//}
+		if(handler.isHerder(sender)) {
+			herd = "true";
+		}
+		System.out.printf("%s %s %s %s %s %s %s\n", channel, sender, login, hostname, message, /*op, */herd);
 	}
 	
 	@Override
@@ -62,32 +71,57 @@ public class ESABot extends PircBot {
 				this.sendMessage(sender, "Added to herders");
 			}
 		}
-		if(message.equalsIgnoreCase("herders") && this.herders.contains(sender)) {
+		if(message.equalsIgnoreCase("herders") && this.handler.isHerder(sender)) {
 			for(String s : herders) {
 				sendMessage(sender, s);
 			}
 		}
-		if(message.equalsIgnoreCase("deauth") && this.herders.contains(sender)) {
+		if(message.equalsIgnoreCase("deauth") && this.handler.isHerder(sender)) {
 			this.herders.remove(sender);
 			this.sendMessage(sender, "De-Authed");
+		}
+		if(message.startsWith("ops") && this.handler.isHerder(sender)) {
+			for(String s : this.ops) {
+				sendMessage(sender, s);
+			}
 		}
 	}
 	
 	@Override
 	public void onDisconnect() {
-		this.doConnect();
+		this.handler.doConnect();
 	}
 	
-	private void doConnect() {
-		try {
-			this.connectWithNoB(this.network, 6667, null);
-		} catch (NickAlreadyInUseException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (IrcException e) {
-			e.printStackTrace();
+	@Override
+	public void onUserList(String channel, PircUser[] users) {
+		for(PircUser u : users) {
+			if(u.isOp()) {
+				this.ops.add(channel + ":" + u.getNick());
+			}
 		}
 	}
 	
+	@Override
+	public void onOp(String channel, String sourceNick, String sourceLogin, String sourceHostname, String recipient) {
+		this.ops.add(channel + ":" + recipient);
+	}
+	
+	@Override
+	public void onDeop(String channel, String sourceNick, String sourceLogin, String sourceHostname, String recipient) {
+		this.ops.remove(channel + ":" + recipient);
+	}
+	
+	@Override
+	public void onNickChange(String oldNick, String login, String hostname, String newNick) {
+		if(this.handler.isHerder(oldNick)) {
+			this.herders.remove(oldNick);
+			this.herders.add(newNick);
+		}
+		/*for(String ch : this.channels) {
+			if(this.handler.isOp(oldNick, ch)) {
+				this.ops.remove(oldNick);
+				this.ops.add(newNick);
+			}
+		}*/
+	}
 }

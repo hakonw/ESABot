@@ -1,6 +1,9 @@
 package me.aslettemark.esabot;
 
-import org.jibble.pircbot.PircUser;
+import java.io.IOException;
+
+import org.jibble.pircbot.IrcException;
+import org.jibble.pircbot.NickAlreadyInUseException;
 
 public class IRCHandler {
 	
@@ -11,11 +14,15 @@ public class IRCHandler {
 	}
 	
 	public void command(String channel, String sender, String login, String hostname, String command, boolean verbose) {
-		boolean op = this.isOp(sender, channel);
-		
 		if(command.equalsIgnoreCase("kill")) {
-			if(op && isHerder(sender)) {
+			if(isHerder(sender)) {
+				bot.sendMessage(channel, "I love you");
 				bot.sendAction(channel, "is kill");
+				try {
+					Thread.sleep(1100);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
 				bot.disconnect();
 				bot.dispose();
 			} else {
@@ -23,6 +30,7 @@ public class IRCHandler {
 			}
 		}
 		
+		//Easter egg to be removed later
 		if(command.equalsIgnoreCase("portal") && (sender.equalsIgnoreCase("Kermi") || this.isHerder(sender))) {
 			bot.sendMessage(channel, "I'm doing Science and I'm still alive.");
 			bot.sendMessage(channel, "I feel FANTASTIC and I'm still alive.");
@@ -32,24 +40,31 @@ public class IRCHandler {
 			bot.sendMessage(channel, "STILL ALIVE");
 		}
 	}
-	
+	/*
 	public boolean isOp(String nick, String channel) {
-		PircUser[] u = bot.getUsers(channel);
-		for(PircUser us: u) {
-			if(us.getPrefix().equalsIgnoreCase("@")) {
-				return true;
-			}
+		if(bot.ops.contains(channel + ":" + nick)) {
+			return true;
+		}
+		return false;
+	}*/
+	
+	public boolean isHerder(String nick) {
+		if(bot.herders.contains(nick)) {
+			return true;
 		}
 		return false;
 	}
 	
-	public boolean isHerder(String nick) {
-		for(String n: bot.herders) {
-			if(n.equalsIgnoreCase(nick)) {
-				return true;
-			}
+	public void doConnect() {
+		try {
+			this.bot.connectWithNoB(this.bot.network, 6667, null);
+		} catch (NickAlreadyInUseException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (IrcException e) {
+			e.printStackTrace();
 		}
-		return false;
 	}
 
 }
