@@ -57,33 +57,21 @@ public class ESABot extends PircBot {
 		System.out.printf("%s %s %s %s %s %s %s\n", channel, sender, login, hostname, message, /*op, */herd);
 	}
 	
+	public void onPrivateMessage(String sender, String login, String hostname, String message) {
+		this.handler.message(sender, hostname, login, message);
+		
+		//construction zone
+		String herd = "false";
+		if(handler.isHerder(sender)) {
+			herd = "true";
+		}
+		System.out.printf("%s %s %s %s %s\n", sender, login, hostname, message, herd);
+	}
+	
 	@Override
 	public void onKick(String channel, String kickerNick, String kickerLogin, String kickerHostname, String recipientNick, String reason) {
 		if(herders.contains(recipientNick) && !(kickerNick.equalsIgnoreCase(this.nick))) {
 			this.deOp(channel, kickerNick);
-		}
-	}
-	
-	public void onPrivateMessage(String sender, String login, String hostname, String message) {
-		if(message.startsWith("auth ")) {
-			if(this.herdpass.contains(message.split(" ")[1])) {
-				this.herders.add(sender);
-				this.sendMessage(sender, "Added to herders");
-			}
-		}
-		if(message.equalsIgnoreCase("herders") && this.handler.isHerder(sender)) {
-			for(String s : herders) {
-				sendMessage(sender, s);
-			}
-		}
-		if(message.equalsIgnoreCase("deauth") && this.handler.isHerder(sender)) {
-			this.herders.remove(sender);
-			this.sendMessage(sender, "De-Authed");
-		}
-		if(message.startsWith("ops") && this.handler.isHerder(sender)) {
-			for(String s : this.ops) {
-				sendMessage(sender, s);
-			}
 		}
 	}
 	
