@@ -49,6 +49,29 @@ public class IRCHandler {
 			this.bot.topicmask.put(channel, command.substring(10));
 		}
 	}
+	
+	public void message(String sender, String hostname, String login, String message) {
+		if(message.startsWith("auth ")) {
+			if(this.bot.herdpass.contains(message.split(" ")[1])) {
+				this.bot.herders.add(sender);
+				this.bot.sendMessage(sender, "Added to herders");
+			}
+		}
+		if(message.equalsIgnoreCase("herders") && this.bot.handler.isHerder(sender)) {
+			for(String s : this.bot.herders) {
+				this.bot.sendMessage(sender, s);
+			}
+		}
+		if(message.equalsIgnoreCase("deauth") && this.bot.handler.isHerder(sender)) {
+			this.bot.herders.remove(sender);
+			this.bot.sendMessage(sender, "De-Authed");
+		}
+		if(message.startsWith("ops") && this.bot.handler.isHerder(sender)) {
+			for(String s : this.bot.ops) {
+				this.bot.sendMessage(sender, s);
+			}
+		}
+	}
 	/*
 	public boolean isOp(String nick, String channel) {
 		if(bot.ops.contains(channel + ":" + nick)) {
