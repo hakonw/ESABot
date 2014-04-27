@@ -26,6 +26,7 @@ public class ESABot extends PircBot {
 		this.nick = args[1];
 		this.nickpass = args[2];
 		this.handler = new IRCHandler(this);
+		this.setAutoNickChange(true);
 		
 		this.setName(nick);
 		this.setVersion("ESABot v13.3 BUILD 7");
