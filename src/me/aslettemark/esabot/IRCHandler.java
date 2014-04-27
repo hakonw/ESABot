@@ -39,6 +39,15 @@ public class IRCHandler {
 			bot.sendMessage(channel, "STILL ALIVE");
 			bot.sendMessage(channel, "STILL ALIVE");
 		}
+		
+		if(command.startsWith("topic ") && this.isHerder(sender)) {
+			String topic = command.substring(6);
+			this.bot.setTopic(channel, this.bot.topicmask.get(channel).replace("%topic", topic));
+		}
+		if(command.startsWith("topicmask ") && this.isHerder(sender)) {
+			this.bot.topicmask.remove(channel);
+			this.bot.topicmask.put(channel, command.substring(10));
+		}
 	}
 	/*
 	public boolean isOp(String nick, String channel) {

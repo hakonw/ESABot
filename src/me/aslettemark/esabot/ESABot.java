@@ -1,6 +1,7 @@
 package me.aslettemark.esabot;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.jibble.pircbot.PircBot;
 import org.jibble.pircbot.PircUser;
@@ -15,6 +16,8 @@ public class ESABot extends PircBot {
 	public ArrayList<String> herders = new ArrayList<String>();
 	public ArrayList<String> herdpass = new ArrayList<String>();
 	public ArrayList<String> ops = new ArrayList<String>();
+	
+	public HashMap<String, String> topicmask = new HashMap<String, String>();
 	
 	public IRCHandler handler;
 	
@@ -31,6 +34,7 @@ public class ESABot extends PircBot {
 		this.channels = args[3].split(",");
 		for(String c: this.channels) {
 			this.joinChannel(c);
+			topicmask.put(c, "Welcome to " + c + " | %topic");
 		}
 		for(String s : args[4].split(",")) {
 			herdpass.add(s);
@@ -54,7 +58,7 @@ public class ESABot extends PircBot {
 		if(handler.isHerder(sender)) {
 			herd = "true";
 		}
-		System.out.printf("%s %s %s %s %s %s %s\n", channel, sender, login, hostname, message, /*op, */herd);
+		System.out.printf("%s %s %s %s %s %s %s" + System.lineSeparator(), channel, sender, login, hostname, message, /*op, */herd);
 	}
 	
 	@Override
