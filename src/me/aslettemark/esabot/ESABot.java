@@ -15,7 +15,7 @@ public class ESABot extends PircBot {
 	
 	public ArrayList<String> herders = new ArrayList<String>();
 	public ArrayList<String> herdpass = new ArrayList<String>();
-	public ArrayList<String> ops = new ArrayList<String>();
+	//public ArrayList<String> ops = new ArrayList<String>();
 	
 	public HashMap<String, String> topicmask = new HashMap<String, String>();
 	
@@ -50,16 +50,7 @@ public class ESABot extends PircBot {
 			handler.command(channel, sender, login, hostname, message.replaceFirst(".", ""), false);
 		}
 		
-		//debug section/construction zone
-		String op = "false";
-		String herd = "false";
-		//if(handler.isOp(sender, channel)) {
-		//	op = "true";
-		//}
-		if(handler.isHerder(sender)) {
-			herd = "true";
-		}
-		System.out.printf("%s %s %s %s %s %s %s" + System.lineSeparator(), channel, sender, login, hostname, message, /*op, */herd);
+		
 	}
 	
 	public void onPrivateMessage(String sender, String login, String hostname, String message) {
@@ -85,6 +76,7 @@ public class ESABot extends PircBot {
 		this.handler.doConnect();
 	}
 	
+	/*
 	@Override
 	public void onUserList(String channel, PircUser[] users) {
 		for(PircUser u : users) {
@@ -115,6 +107,7 @@ public class ESABot extends PircBot {
 				this.ops.remove(oldNick);
 				this.ops.add(newNick);
 			}
-		}*/
+		}*//*
 	}
+	*/
 }

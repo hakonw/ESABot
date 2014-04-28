@@ -56,11 +56,11 @@ public class IRCHandler {
 			this.bot.herders.remove(sender);
 			this.bot.sendMessage(sender, "De-Authed");
 		}
-		if(message.startsWith("ops") && this.bot.handler.isHerder(sender)) {
+		/*if(message.startsWith("ops") && this.bot.handler.isHerder(sender)) {
 			for(String s : this.bot.ops) {
 				this.bot.sendMessage(sender, s);
 			}
-		}
+		}*/
 	}
 	/*
 	public boolean isOp(String nick, String channel) {
