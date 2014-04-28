@@ -2,6 +2,7 @@ package me.aslettemark.esabot;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Set;
 
 import me.aslettemark.esabot.command.*;
 
@@ -55,12 +56,14 @@ public class ESABot extends PircBot {
 		CommandExecutor topicMaskCommand = new TopicMaskCommand(this);
 		CommandExecutor herdersCommand = new HerdersCommand(this);
 		CommandExecutor deAuthCommand = new DeAuthCommand(this);
+		CommandExecutor noteCommand = new NoteCommand(this);
 		h.assignCommand("kill", killCommand);
 		h.assignCommand("auth", authCommand);
 		h.assignCommand("topic", topicCommand);
 		h.assignCommand("topicmask", topicMaskCommand);
 		h.assignCommand("herders", herdersCommand);
 		h.assignCommand("deauth", deAuthCommand);
+		h.assignCommand("note", noteCommand);
 	}
 	
 	/**
@@ -69,6 +72,18 @@ public class ESABot extends PircBot {
 	 */
 	@Override
 	public void onMessage(String channel, String sender, String login, String hostname, String message) {
+		if(this.handler.hasNotes(sender)) {
+			this.sendMessage(channel, sender + ", you have notes!");
+			for(String s : this.notes.keySet()) {
+				if(s.equalsIgnoreCase(sender)) {
+					for(String s2 : this.notes.get(s).keySet()) {
+						this.sendMessage(channel, sender + ": <" + s2 + "> " + this.notes.get(s).get(s2));
+						this.notes.get(s).remove(s2);
+					}
+				}
+				this.notes.remove(s);
+			}
+		}
 		if(message.startsWith(nick + ": ")) {
 			this.commandExecutors.get(message.split(" ")[1]).execute(channel, sender, login, hostname, message.replaceFirst(this.nick + ": ", ""), false);
 		} else if(message.startsWith(".")) {
@@ -98,6 +113,9 @@ public class ESABot extends PircBot {
 	@Override
 	public void onDisconnect() {
 		this.handler.doConnect();
+		for(String c: this.channels) {
+			this.joinChannel(c);
+		}
 	}
 	
 	/*

@@ -58,6 +58,13 @@ public class IRCHandler {
 	}
 	
 	/**
+	 * Updates the note savefile
+	 */
+	public void saveNotes() {
+		//todo: save all active notes to file
+	}
+	
+	/**
 	 * Assigns a command to the specified CommandExecutor
 	 * @param command Command to assign
 	 * @param exec CommandExecutor to assign to
