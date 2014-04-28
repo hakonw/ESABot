@@ -2,6 +2,8 @@ package me.aslettemark.esabot;
 
 import java.io.IOException;
 
+import me.aslettemark.esabot.command.CommandExecutor;
+
 import org.jibble.pircbot.IrcException;
 import org.jibble.pircbot.NickAlreadyInUseException;
 
@@ -12,56 +14,7 @@ public class IRCHandler {
 	public IRCHandler(ESABot bot) {
 		this.bot = bot;
 	}
-	
-	public void command(String channel, String sender, String login, String hostname, String command, boolean verbose) {
-		if(command.equalsIgnoreCase("kill")) {
-			if(isHerder(sender)) {
-				bot.sendMessage(channel, "I love you");
-				bot.sendAction(channel, "is kill");
-				try {
-					Thread.sleep(1100);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-				bot.disconnect();
-				bot.dispose();
-			} else {
-				bot.sendMessage(channel, "Not allowed");
-			}
-		}
-		
-		if(command.startsWith("topic ") && this.isHerder(sender)) {
-			String topic = command.substring(6);
-			this.bot.setTopic(channel, this.bot.topicmask.get(channel).replace("%topic", topic));
-		}
-		if(command.startsWith("topicmask ") && this.isHerder(sender)) {
-			this.bot.topicmask.remove(channel);
-			this.bot.topicmask.put(channel, command.substring(10));
-		}
-	}
-	
-	public void message(String sender, String hostname, String login, String message) {
-		if(message.startsWith("auth ")) {
-			if(this.bot.herdpass.contains(message.split(" ")[1])) {
-				this.bot.herders.add(sender);
-				this.bot.sendMessage(sender, "Added to herders");
-			}
-		}
-		if(message.equalsIgnoreCase("herders") && this.bot.handler.isHerder(sender)) {
-			for(String s : this.bot.herders) {
-				this.bot.sendMessage(sender, s);
-			}
-		}
-		if(message.equalsIgnoreCase("deauth") && this.bot.handler.isHerder(sender)) {
-			this.bot.herders.remove(sender);
-			this.bot.sendMessage(sender, "De-Authed");
-		}
-		/*if(message.startsWith("ops") && this.bot.handler.isHerder(sender)) {
-			for(String s : this.bot.ops) {
-				this.bot.sendMessage(sender, s);
-			}
-		}*/
-	}
+
 	/*
 	public boolean isOp(String nick, String channel) {
 		if(bot.ops.contains(channel + ":" + nick)) {
@@ -70,6 +23,11 @@ public class IRCHandler {
 		return false;
 	}*/
 	
+	/**
+	 * Returns wether the specified nick is a bot herder
+	 * @param nick The nick to check
+	 * @return
+	 */
 	public boolean isHerder(String nick) {
 		if(bot.herders.contains(nick)) {
 			return true;
@@ -77,6 +35,9 @@ public class IRCHandler {
 		return false;
 	}
 	
+	/**
+	 * Connects to the network the bot is configured to use
+	 */
 	public void doConnect() {
 		try {
 			this.bot.connectWithNoB(this.bot.network, 6667, null);
@@ -87,6 +48,34 @@ public class IRCHandler {
 		} catch (IrcException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	/**
+	 * Loads unread notes from the note file.
+	 */
+	public void loadNotes() {
+		//todo: function to load in the notes from the notes file corresponding with the current network
+	}
+	
+	/**
+	 * Assigns a command to the specified CommandExecutor
+	 * @param command Command to assign
+	 * @param exec CommandExecutor to assign to
+	 */
+	public void assignCommand(String command, CommandExecutor exec) {
+		this.bot.commandExecutors.put(command, exec);
+	}
+	
+	/**
+	 * Returns wether the specified nick has any unread notes
+	 * @param nick The nick to check
+	 * @return
+	 */
+	public boolean hasNotes(String nick) {
+		if(this.bot.notes.containsKey(nick)) {
+			return true;
+		}
+		return false;
 	}
 
 }
