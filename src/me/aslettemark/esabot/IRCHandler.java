@@ -30,16 +30,6 @@ public class IRCHandler {
 			}
 		}
 		
-		//Easter egg to be removed later
-		if(command.equalsIgnoreCase("portal") && (sender.equalsIgnoreCase("Kermi") || this.isHerder(sender))) {
-			bot.sendMessage(channel, "I'm doing Science and I'm still alive.");
-			bot.sendMessage(channel, "I feel FANTASTIC and I'm still alive.");
-			bot.sendMessage(channel, "While you're dying I'll be still alive.");
-			bot.sendMessage(channel, "And when you're dead I will be still alive.");
-			bot.sendMessage(channel, "STILL ALIVE");
-			bot.sendMessage(channel, "STILL ALIVE");
-		}
-		
 		if(command.startsWith("topic ") && this.isHerder(sender)) {
 			String topic = command.substring(6);
 			this.bot.setTopic(channel, this.bot.topicmask.get(channel).replace("%topic", topic));
