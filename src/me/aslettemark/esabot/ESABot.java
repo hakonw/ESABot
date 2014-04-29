@@ -2,7 +2,6 @@ package me.aslettemark.esabot;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Set;
 
 import me.aslettemark.esabot.command.*;
 
@@ -81,8 +80,9 @@ public class ESABot extends PircBot {
 						this.notes.get(s).remove(s2);
 					}
 				}
-				this.notes.remove(s);
+				
 			}
+			this.notes.remove(sender);
 		}
 		if(message.startsWith(nick + ": ")) {
 			this.commandExecutors.get(message.split(" ")[1]).execute(channel, sender, login, hostname, message.replaceFirst(this.nick + ": ", ""), false);

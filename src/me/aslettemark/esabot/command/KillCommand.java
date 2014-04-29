@@ -24,9 +24,12 @@ public class KillCommand extends CommandExecutor {
 				bot.disconnect();
 				bot.dispose();
 			}
-			
 		} else {
-			bot.sendMessage(channel, "Not allowed");
+			if(pm) {
+				bot.sendMessage(sender, "Not allowed");
+			} else {
+				bot.sendMessage(channel, "Not allowed");
+			}
 		}
 	}
 	
