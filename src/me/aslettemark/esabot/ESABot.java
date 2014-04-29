@@ -19,8 +19,8 @@ public class ESABot extends PircBot {
 	//public ArrayList<String> ops = new ArrayList<String>();
 	
 	public HashMap<String, String> topicmask = new HashMap<String, String>();
-	//Create a hashmap with receiver, note where note is a hashmap with sender, notetext
-	public HashMap<String, HashMap<String, String>> notes = new HashMap<String, HashMap<String, String>>();
+	//K = user with note, value = list of notes in format <sender> note
+	public HashMap<String, ArrayList<String>> notes = new HashMap<String, ArrayList<String>>();
 	public HashMap<String, CommandExecutor> commandExecutors = new HashMap<String, CommandExecutor>();
 	
 	public IRCHandler handler;
@@ -75,9 +75,8 @@ public class ESABot extends PircBot {
 			this.sendMessage(channel, sender + ", you have notes!");
 			for(String s : this.notes.keySet()) {
 				if(s.equalsIgnoreCase(sender)) {
-					for(String s2 : this.notes.get(s).keySet()) {
-						this.sendMessage(channel, sender + ": <" + s2 + "> " + this.notes.get(s).get(s2));
-						this.notes.get(s).remove(s2);
+					for(String note : this.notes.get(s)) {
+						this.sendMessage(channel, sender + ": " + note);
 					}
 				}
 				

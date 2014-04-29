@@ -1,6 +1,6 @@
 package me.aslettemark.esabot.command;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 
 import me.aslettemark.esabot.ESABot;
 
@@ -12,9 +12,17 @@ public class NoteCommand extends CommandExecutor{
 
 	@Override
 	public void execute(String channel, String sender, String login, String hostname, String command, boolean pm) {
-		HashMap<String, String> note = new HashMap<String, String>();
-		note.put(sender, command.replaceFirst("note ", ""));
-		this.bot.notes.put(command.split(" ")[1], note);
+		String receiver = command.split(" ")[1];
+		String note = command.replaceFirst("note " + receiver + " ", "") ;
+		ArrayList<String> notes = new ArrayList<String>();
+		if(this.bot.handler.hasNotes(receiver)) {
+			notes = this.bot.notes.get(receiver);
+			notes.add("<" + sender + "> " + note);
+			this.bot.notes.put(receiver, notes);
+		} else {
+			notes.add("<" + sender + "> " + note);
+			this.bot.notes.put(receiver, notes);
+		}
 		if(pm) {
 			this.bot.sendMessage(sender, "Note noted.");
 		} else {
