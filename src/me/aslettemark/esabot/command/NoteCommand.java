@@ -12,22 +12,24 @@ public class NoteCommand extends CommandExecutor{
 
 	@Override
 	public void execute(String channel, String sender, String login, String hostname, String command, boolean pm) {
-		String receiver = command.split(" ")[1];
-		String note = command.replaceFirst("note " + receiver + " ", "") ;
-		ArrayList<String> notes = new ArrayList<String>();
-		if(this.bot.handler.hasNotes(receiver)) {
-			notes = this.bot.notes.get(receiver);
-			notes.add("<" + sender + "> " + note);
-			this.bot.notes.put(receiver, notes);
-		} else {
-			notes.add("<" + sender + "> " + note);
-			this.bot.notes.put(receiver, notes);
-		}
-		if(pm) {
-			this.bot.sendMessage(sender, "Note noted.");
-		} else {
-			this.bot.sendMessage(channel, sender + ": Note noted.");
+		if (command.length() > 2) {
+			String receiver = command.split(" ")[1];
+			String note = command.replaceFirst("note " + receiver + " ", "") ;
+			ArrayList<String> notes = new ArrayList<String>();
+			if(this.bot.handler.hasNotes(receiver)) {
+				notes = this.bot.notes.get(receiver);
+				notes.add("<" + sender + "> " + note);
+				this.bot.notes.put(receiver, notes);
+			} else {
+				notes.add("<" + sender + "> " + note);
+				this.bot.notes.put(receiver, notes);
+			}
+			if(pm) {
+				this.bot.sendMessage(sender, "Note noted.");
+			} else {
+				this.bot.sendMessage(channel, sender + ": Note noted.");
+			}
+			bot.handler.saveNotes();
 		}
 	}
-
 }

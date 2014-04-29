@@ -18,10 +18,11 @@ public class ESABot extends PircBot {
 	public ArrayList<String> herdpass = new ArrayList<String>();
 	//public ArrayList<String> ops = new ArrayList<String>();
 	
-	public HashMap<String, String> topicmask = new HashMap<String, String>();
 	//K = user with note, value = list of notes in format <sender> note
 	public HashMap<String, ArrayList<String>> notes = new HashMap<String, ArrayList<String>>();
 	public HashMap<String, CommandExecutor> commandExecutors = new HashMap<String, CommandExecutor>();
+	public HashMap<String, String> topicmask = new HashMap<String, String>();
+	public HashMap<String, String> files = new HashMap<String, String>();
 	
 	public IRCHandler handler;
 	
@@ -35,6 +36,10 @@ public class ESABot extends PircBot {
 		this.setName(nick);
 		this.setVersion("ESABot v13.3 BUILD 7");
 		
+		//handle files
+		this.handler.checkFiles();
+		this.handler.loadNotes();
+		
 		//do the connection, set up automatic variables
 		this.handler.doConnect();
 		this.channels = args[3].split(",");
@@ -45,24 +50,17 @@ public class ESABot extends PircBot {
 		for(String s : args[4].split(",")) {
 			herdpass.add(s);
 		}
-		this.handler.loadNotes();
 		
 		//assign commands
 		IRCHandler h = this.handler;
-		CommandExecutor killCommand = new KillCommand(this);
-		CommandExecutor authCommand = new AuthCommand(this);
-		CommandExecutor topicCommand = new TopicCommand(this);
-		CommandExecutor topicMaskCommand = new TopicMaskCommand(this);
-		CommandExecutor herdersCommand = new HerdersCommand(this);
-		CommandExecutor deAuthCommand = new DeAuthCommand(this);
-		CommandExecutor noteCommand = new NoteCommand(this);
-		h.assignCommand("kill", killCommand);
-		h.assignCommand("auth", authCommand);
-		h.assignCommand("topic", topicCommand);
-		h.assignCommand("topicmask", topicMaskCommand);
-		h.assignCommand("herders", herdersCommand);
-		h.assignCommand("deauth", deAuthCommand);
-		h.assignCommand("note", noteCommand);
+		h.assignCommand("kill", new KillCommand(this));
+		h.assignCommand("auth", new AuthCommand(this));
+		h.assignCommand("topic", new TopicCommand(this));
+		h.assignCommand("topicmask", new TopicMaskCommand(this));
+		h.assignCommand("herders", new HerdersCommand(this));
+		h.assignCommand("deauth", new DeAuthCommand(this));
+		h.assignCommand("note", new NoteCommand(this));
+		h.assignCommand("notes", new NotesCommand(this));
 	}
 	
 	/**
@@ -75,13 +73,20 @@ public class ESABot extends PircBot {
 			this.sendMessage(channel, sender + ", you have notes!");
 			for(String s : this.notes.keySet()) {
 				if(s.equalsIgnoreCase(sender)) {
-					for(String note : this.notes.get(s)) {
-						this.sendMessage(channel, sender + ": " + note);
+					if(this.notes.get(s).size() > 4) {
+						this.sendMessage(channel, "Too many notes, sending in PM.");
+						for(String note : this.notes.get(s)) {
+							this.sendMessage(sender, "Note: " + note);
+						}
+					} else {
+						for(String note : this.notes.get(s)) {
+							this.sendMessage(channel, sender + ": " + note);
+						}
 					}
 				}
-				
 			}
 			this.notes.remove(sender);
+			this.handler.saveNotes();
 		}
 		if(message.startsWith(nick + ": ")) {
 			this.commandExecutors.get(message.split(" ")[1]).execute(channel, sender, login, hostname, message.replaceFirst(this.nick + ": ", ""), false);
@@ -97,6 +102,7 @@ public class ESABot extends PircBot {
 	@Override
 	public void onPrivateMessage(String sender, String login, String hostname, String message) {
 		this.commandExecutors.get(message.split(" ")[0]).execute(null, sender, login, hostname, message, true);
+		System.out.println("PM " + sender + " > " + message);
 	}
 	
 	/**

@@ -1,11 +1,11 @@
 package me.aslettemark.esabot;
 
-import java.io.IOException;
+import java.io.*;
+import java.util.ArrayList;
 
-import me.aslettemark.esabot.command.CommandExecutor;
+import me.aslettemark.esabot.command.*;
 
-import org.jibble.pircbot.IrcException;
-import org.jibble.pircbot.NickAlreadyInUseException;
+import org.jibble.pircbot.*;
 
 public class IRCHandler {
 	
@@ -54,14 +54,91 @@ public class IRCHandler {
 	 * Loads unread notes from the note file.
 	 */
 	public void loadNotes() {
-		//todo: function to load in the notes from the notes file corresponding with the current network
+		String fileName = this.bot.files.get("notes");
+		String line = null;
+		try {
+			FileReader reader = new FileReader(fileName);
+			BufferedReader buffer = new BufferedReader(reader);
+			String target = "";
+			ArrayList<String> file = new ArrayList<String>();
+			while ((line = buffer.readLine()) != null) {
+				file.add(line);
+			}
+			for(int i=0; i<file.size(); i++) {
+				line = file.get(i);
+				if(!line.startsWith("  ")) {
+					target = line.replace(System.getProperty("line.separator"), "");
+					bot.notes.put(target, new ArrayList<String>());
+					System.out.println("Loaded target " + target);
+				}
+			}
+			for(int i=0; i<file.size(); i++) {
+				line = file.get(i);
+				if(line.startsWith("  ")) {
+					bot.notes.get(target).add(line.replaceFirst("  ", ""));
+					System.out.println("added " + line + " to " + target);
+				} else {
+					target = line.replace(System.getProperty("line.separator"), "");
+					System.out.println("Set target " + target);
+				}
+			}
+			buffer.close();
+			reader.close();
+		} catch (FileNotFoundException ex) {
+			System.out.println("Not able to open file " + fileName);
+		} catch (IOException e) {
+			System.out.println("Encountered an error reading file " + fileName);
+		}
 	}
-	
+
 	/**
 	 * Updates the note savefile
 	 */
 	public void saveNotes() {
-		//todo: save all active notes to file
+		String fileName = this.bot.files.get("notes");
+		try {
+			FileWriter fileWriter = new FileWriter(fileName);
+			BufferedWriter buffer = new BufferedWriter(fileWriter);
+			for(String target : this.bot.notes.keySet()) {
+				buffer.write(target);
+				buffer.newLine();
+				for(String note : this.bot.notes.get(target)) {
+					buffer.write("  " + note);
+					buffer.newLine();
+				}
+			}
+			buffer.close();
+			fileWriter.close();
+		} catch (IOException e) {
+			System.out.println("Error writing to file " + fileName);
+		}
+	}
+
+	/**
+	 * Verifies that all needed files exist, and creates them if not
+	 */
+	public void checkFiles() {
+		String network = bot.network.replace(".", "-");
+		File notes = new File("data/" + network + "/notes.txt");
+		File data = new File("data");
+		File net = new File("data/" + network);
+		if(!data.exists()) {
+			data.mkdir();
+			net.mkdir();
+		}
+		if(notes.exists() && !notes.isDirectory()) {
+			System.out.println("Verified notes.txt for " + network);
+		} else {
+			System.out.println("Could not verify notes.txt for " + network);
+			try {
+				notes.createNewFile();
+				System.out.println("Created new file: data/" + network + "/notes.txt");
+			} catch (IOException e) {
+				System.out.println("Was not able to create notes.txt for " + network);
+				e.printStackTrace();
+			}
+		}
+		this.bot.files.put("notes", net+"/notes.txt");
 	}
 	
 	/**
