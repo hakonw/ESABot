@@ -3,3 +3,6 @@ ESABot
 Usage
 java -jar ESABot.jar <server> <nick> <NickServ pass> <#chann,#els> <herdpass>
 Where herdpass is the password(s) for herder access to the bot. Format: password,pass2,pass3
+
+About
+ESABot is a project done for fun for use in channels i own, however feel free to use the bot yourself. I take no responsibility for what people decide to use the code for.

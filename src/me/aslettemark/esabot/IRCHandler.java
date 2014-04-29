@@ -69,17 +69,14 @@ public class IRCHandler {
 				if(!line.startsWith("  ")) {
 					target = line.replace(System.getProperty("line.separator"), "");
 					bot.notes.put(target, new ArrayList<String>());
-					System.out.println("Loaded target " + target);
 				}
 			}
 			for(int i=0; i<file.size(); i++) {
 				line = file.get(i);
 				if(line.startsWith("  ")) {
 					bot.notes.get(target).add(line.replaceFirst("  ", ""));
-					System.out.println("added " + line + " to " + target);
 				} else {
 					target = line.replace(System.getProperty("line.separator"), "");
-					System.out.println("Set target " + target);
 				}
 			}
 			buffer.close();
