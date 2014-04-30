@@ -10,7 +10,7 @@ import org.jibble.pircbot.PircBot;
 public class ESABot extends PircBot {
 	
 	public String nick;
-	private String nickpass;
+	public String nickpass;
 	public String network;
 	public String[] channels;
 	
@@ -61,6 +61,7 @@ public class ESABot extends PircBot {
 		h.assignCommand("deauth", new DeAuthCommand(this));
 		h.assignCommand("note", new NoteCommand(this));
 		h.assignCommand("notes", new NotesCommand(this));
+		h.assignCommand("nickserv", new NickServCommand(this));
 	}
 	
 	/**
