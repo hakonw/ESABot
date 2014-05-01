@@ -4,16 +4,16 @@ import me.aslettemark.esabot.ESABot;
 
 public class DeAuthCommand extends CommandExecutor{
 
-	public DeAuthCommand(ESABot bot) {
-		super(bot);
-	}
+    public DeAuthCommand(ESABot bot) {
+        super(bot);
+    }
 
-	@Override
-	public void execute(String channel, String sender, String login, String hostname, String command, boolean pm) {
-		if(this.bot.handler.isHerder(sender)) {
-			this.bot.herders.remove(sender);
-			this.bot.sendMessage(sender, "De-Authed");
-		}
-	}
+    @Override
+    public void execute(String channel, String sender, String login, String hostname, String command, boolean pm) {
+        if(this.bot.handler.isHerder(sender)) {
+            this.bot.herders.remove(sender);
+            this.bot.sendMessage(sender, "De-Authed");
+        }
+    }
 
 }

@@ -50,7 +50,7 @@ public class Queue {
      *
      * @param o The Object to be added to the Queue.
      */
-	public void add(Object o) {
+    public void add(Object o) {
         synchronized(_queue) {
             _queue.addElement(o);
             _queue.notify();
@@ -63,7 +63,7 @@ public class Queue {
      * 
      * @param o The Object to be added to the Queue.
      */
-	public void addFront(Object o) {
+    public void addFront(Object o) {
         synchronized(_queue) {
             _queue.insertElementAt(o, 0);
             _queue.notify();
@@ -141,6 +141,6 @@ public class Queue {
     }
     
 
-	private Vector<Object> _queue = new Vector<Object>();
+    private Vector<Object> _queue = new Vector<Object>();
     
 }

@@ -219,7 +219,7 @@ public abstract class PircBot implements PircReplyConstants {
         
         // Now start the outputThread that will be used to send all messages.
         if (_outputThread == null) {
-        	_outputThread = new PircOutputThread(this, _outQueue);
+            _outputThread = new PircOutputThread(this, _outQueue);
             _outputThread.start();
         }
         
@@ -242,9 +242,9 @@ public abstract class PircBot implements PircReplyConstants {
      * @throws NickAlreadyInUseException if our nick is already in use on the server.
      */
     public final synchronized void connect(String hostname, int port, String localip) throws IOException, IrcException, NickAlreadyInUseException {
-    	//laziest fix ever ^_^
-    	//String password=null;
-    	
+        //laziest fix ever ^_^
+        //String password=null;
+        
         _server = hostname;
         _port = port;
         _password = null;//=password
@@ -2967,7 +2967,7 @@ public abstract class PircBot implements PircReplyConstants {
      * 
      * @see #onUserList(String,PircUser[]) onUserList
      */
-	public final PircUser[] getUsers(String channel) {
+    public final PircUser[] getUsers(String channel) {
         channel = channel.toLowerCase();
         PircUser[] userArray = new PircUser[0];
         synchronized (_channels) {
@@ -3040,7 +3040,7 @@ public abstract class PircBot implements PircReplyConstants {
      * Add a user to the specified channel in our memory.
      * Overwrite the existing entry if it exists.
      */
-	private final void addUser(String channel, PircUser user) {
+    private final void addUser(String channel, PircUser user) {
         channel = channel.toLowerCase();
         synchronized (_channels) {
             Hashtable<PircUser, PircUser> users = (Hashtable<PircUser, PircUser>) _channels.get(channel);
@@ -3086,7 +3086,7 @@ public abstract class PircBot implements PircReplyConstants {
     /**
      * Rename a user if they appear in any of the channels we know about.
      */
-	private final void renameUser(String oldNick, String newNick) {
+    private final void renameUser(String oldNick, String newNick) {
         synchronized (_channels) {
             Enumeration<String> enumeration = _channels.keys();
             while (enumeration.hasMoreElements()) {
@@ -3115,14 +3115,14 @@ public abstract class PircBot implements PircReplyConstants {
     /**
      * Removes all channels from our memory of users.
      */
-	private final void removeAllChannels() {
+    private final void removeAllChannels() {
         synchronized(_channels) {
             _channels = new Hashtable<String, Hashtable<PircUser, PircUser>>();
         }
     }
 
 
-	private final void updateUser(String channel, int userMode, String nick) {
+    private final void updateUser(String channel, int userMode, String nick) {
         channel = channel.toLowerCase();
         synchronized (_channels) {
             Hashtable<PircUser, PircUser> users = (Hashtable<PircUser, PircUser>) _channels.get(channel);
@@ -3196,11 +3196,11 @@ public abstract class PircBot implements PircReplyConstants {
     
     // A Hashtable of channels that points to a selfreferential Hashtable of
     // User objects (used to remember which users are in which channels).
-	private Hashtable<String, Hashtable<PircUser, PircUser>> _channels = new Hashtable<String, Hashtable<PircUser, PircUser>>();
+    private Hashtable<String, Hashtable<PircUser, PircUser>> _channels = new Hashtable<String, Hashtable<PircUser, PircUser>>();
     
     // A Hashtable to temporarily store channel topics when we join them
     // until we find out who set that topic.
-	private Hashtable<String, String> _topics = new Hashtable<String, String>();
+    private Hashtable<String, String> _topics = new Hashtable<String, String>();
     
     // DccManager to process and handle all DCC events.
     private PircDccManager _dccManager = new PircDccManager(this);
