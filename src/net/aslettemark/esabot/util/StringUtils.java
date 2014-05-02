@@ -1,4 +1,4 @@
-package me.aslettemark.esabot.util;
+package net.aslettemark.esabot.util;
 
 public class StringUtils {
     

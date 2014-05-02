@@ -1,9 +1,9 @@
-package me.aslettemark.esabot;
+package net.aslettemark.esabot;
 
 import java.io.*;
 import java.util.ArrayList;
 
-import me.aslettemark.esabot.command.*;
+import net.aslettemark.esabot.command.*;
 
 import org.jibble.pircbot.*;
 

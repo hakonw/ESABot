@@ -1,8 +1,8 @@
-package me.aslettemark.esabot.command;
+package net.aslettemark.esabot.command;
 
 import java.util.ArrayList;
 
-import me.aslettemark.esabot.ESABot;
+import net.aslettemark.esabot.ESABot;
 
 public class NoteCommand extends CommandExecutor{
 

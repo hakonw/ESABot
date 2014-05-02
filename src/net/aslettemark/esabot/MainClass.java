@@ -1,4 +1,4 @@
-package me.aslettemark.esabot;
+package net.aslettemark.esabot;
 
 public class MainClass {
     

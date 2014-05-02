@@ -1,6 +1,6 @@
-package me.aslettemark.esabot.command;
+package net.aslettemark.esabot.command;
 
-import me.aslettemark.esabot.ESABot;
+import net.aslettemark.esabot.ESABot;
 
 public class HerdersCommand extends CommandExecutor {
 

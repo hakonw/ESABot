@@ -1,9 +1,9 @@
-package me.aslettemark.esabot;
+package net.aslettemark.esabot;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import me.aslettemark.esabot.command.*;
+import net.aslettemark.esabot.command.*;
 
 import org.jibble.pircbot.PircBot;
 
@@ -26,7 +26,7 @@ public class ESABot extends PircBot {
     
     public IRCHandler handler;
     
-    public ESABot(String[] args) {
+    public ESABot(String[] args) {  
         //set variables
         this.network = args[0];
         this.nick = args[1];
