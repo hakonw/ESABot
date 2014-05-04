@@ -70,7 +70,7 @@ public class ESABot extends PircBot {
      */
     @Override
     public void onMessage(String channel, String sender, String login, String hostname, String message) {
-        if(this.handler.hasNotes(sender)) {
+        if(this.handler.hasNotes(sender.toLowerCase())) {
             this.sendMessage(channel, sender + ", you have notes!");
             for(String s : this.notes.keySet()) {
                 if(s.equalsIgnoreCase(sender)) {

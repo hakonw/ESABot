@@ -13,7 +13,7 @@ public class NoteCommand extends CommandExecutor{
     @Override
     public void execute(String channel, String sender, String login, String hostname, String command, boolean pm) {
         if (command.length() > 2) {
-            String target = command.split(" ")[1];
+            String target = command.split(" ")[1].toLowerCase();
             String note = command.replaceFirst("note " + target + " ", "") ;
             ArrayList<String> notes = new ArrayList<String>();
             String[] disallowed = {"\n", "\r"};
