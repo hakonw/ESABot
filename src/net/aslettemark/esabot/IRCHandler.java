@@ -14,14 +14,6 @@ public class IRCHandler {
     public IRCHandler(ESABot bot) {
         this.bot = bot;
     }
-
-    /*
-    public boolean isOp(String nick, String channel) {
-        if(bot.ops.contains(channel + ":" + nick)) {
-            return true;
-        }
-        return false;
-    }*/
     
     /**
      * Returns wether the specified nick is a bot herder
