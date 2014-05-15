@@ -13,6 +13,7 @@ public class ESABot extends PircBot {
     public String nickpass;
     public String network;
     public String[] channels;
+    public int port = 6667;
     
     public ArrayList<String> herders = new ArrayList<String>();
     public ArrayList<String> herdpass = new ArrayList<String>();
