@@ -64,7 +64,7 @@ public class RpgCommand extends CommandExecutor {
                         if (commandArgu[3].isEmpty()) {
                             bot.sendMessage(channel, "Syntax error use <.rpg cheat value 'name'>");
                         } else {
-                            util.MakeRpgCheatValues(commandArgu[3], channel);
+                            util.makeRpgCheatValues(commandArgu[3], channel);
                         }
                         break;
 
@@ -72,7 +72,7 @@ public class RpgCommand extends CommandExecutor {
                         if (commandArgu[3].isEmpty()) {
                             bot.sendMessage(channel, "Syntax error use <.rpg cheat reset 'name'>");
                         } else {
-                            util.MakeRpgRegVal(commandArgu[3], channel);
+                            util.makeRpgRegVal(commandArgu[3], channel);
                             bot.sendMessage(channel, "Done with reset to " + commandArgu[3]);
                         }
                         break;

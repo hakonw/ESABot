@@ -49,14 +49,14 @@ public class RpgUtil {
     public void makeRpgReg(String sender, String channel) {
         if (cmd.hmID.get(sender) == null) {
             cmd.hmID.put(sender, new Integer(cmd.hmID.size()));
-            MakeRpgRegVal(sender, channel);
+            makeRpgRegVal(sender, channel);
             bot.sendMessage(channel, "You are now signed up with ID " + cmd.hmID.get(sender));
         } else {
-            bot.sendMessage(channel, "You're registerd with ID " + cmd.hmID.get(sender));
+            bot.sendMessage(channel, "You're registered with ID " + cmd.hmID.get(sender));
         }
     }
 
-    public void MakeRpgRegVal(String sender, String channel) {
+    public void makeRpgRegVal(String sender, String channel) {
         int tempIdVal = cmd.hmID.get(sender);
 
         cmd.rpgID[tempIdVal][0] = 1; // liv
@@ -64,7 +64,7 @@ public class RpgUtil {
         cmd.rpgID[tempIdVal][2] = 12; // stamina
     }
 
-    public void MakeRpgCheatValues(String sender, String channel) {
+    public void makeRpgCheatValues(String sender, String channel) {
         int tempValue[] = new int[3];
         for (int i = 0; i <= 2; i++) {
             tempValue[i] = cmd.rpgID[cmd.hmID.get(sender)][i];
