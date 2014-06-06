@@ -18,6 +18,8 @@ public class RpgUtil {
             if (tempLiv <= 0) {
                 cmd.rpgID[i][0] = 0;
                 bot.sendMessage(channel, cmd.rpgIDS[i] + " is dead. RIP IN PEACE!");
+            } else {
+                cmd.rpgID[i][0] = 1;
             }
         }
     }
@@ -26,7 +28,10 @@ public class RpgUtil {
         if (cmd.rpgID[cmd.hmID.get(sender)][1] <= 0) {
             cmd.rpgID[cmd.hmID.get(sender)][0] = 0;
             bot.sendMessage(channel, sender + " is dead. RIP IN PEACE!");
+        } else {
+            cmd.rpgID[cmd.hmID.get(sender)][0] = 1;
         }
+
     }
 
     public void makeRpgAttack(String sender, String receiver, String spell, int damage, int stamina, String channel, Boolean heal) {
@@ -34,12 +39,12 @@ public class RpgUtil {
         if (!(cmd.hmID.get(sender) == null)) {
             if (!(cmd.hmID.get(receiver) == null)) {
                 if (cmd.rpgID[tempRpgId][2] >= stamina) {
-                    if (cmd.rpgID[cmd.hmID.get(receiver)][1] >= 0) {
+                    if (cmd.rpgID[cmd.hmID.get(receiver)][1] >= 0 || heal) {
                         final int tempRpgStamina = cmd.rpgID[tempRpgId][2];
                         final int tempRpgHp = cmd.rpgID[tempRpgId][1];
 
                         cmd.rpgID[tempRpgId][2] = tempRpgStamina - stamina;
-                        cmd.rpgID[tempRpgId][1] = tempRpgHp - damage;
+                        cmd.rpgID[cmd.hmID.get(receiver)][1] = tempRpgHp - damage;
 
                         if (heal) {
                             bot.sendMessage(channel, sender + " healed " + receiver + " with " + -damage + " hp with his " + spell + "ing spell and used up " + stamina + " stamina.");
@@ -97,12 +102,12 @@ public class RpgUtil {
         String[] tempXaY = cmd.rpgPOS[cmd.hmID.get(sender)].split("_");
         int tempX = Integer.parseInt(tempXaY[0]);
         int tempY = Integer.parseInt(tempXaY[1]);
-        if ((direction.equalsIgnoreCase("north") && tempX == cmd.rpgXaY[0]) || (direction.equalsIgnoreCase("vest") && tempY == cmd.rpgXaY[0]) || (direction.equalsIgnoreCase("south") && tempX == cmd.rpgXaY[1]) || (direction.equalsIgnoreCase("east") && tempY == cmd.rpgXaY[1])) {
-            bot.sendMessage(channel, "You cannot move this way, you're on the edge.");
+        if ((direction.equalsIgnoreCase("north") && tempX == cmd.rpgXaY[0]) || (direction.equalsIgnoreCase("west") && tempY == cmd.rpgXaY[0]) || (direction.equalsIgnoreCase("south") && tempX == cmd.rpgXaY[1]) || (direction.equalsIgnoreCase("east") && tempY == cmd.rpgXaY[1])) {
+            bot.sendMessage(channel, "You cannot move this way, you're on the edge of the world.");
         } else {
             if (direction.equalsIgnoreCase("north")) {
                 cmd.rpgPOS[cmd.hmID.get(sender)] = tempX - 1 + "_" + tempY;
-            } else if (direction.equalsIgnoreCase("vest")) {
+            } else if (direction.equalsIgnoreCase("west")) {
                 tempY--;
                 cmd.rpgPOS[cmd.hmID.get(sender)] = tempX + "_" + tempY;
             } else if (direction.equalsIgnoreCase("south")) {
@@ -116,7 +121,7 @@ public class RpgUtil {
 
     public void makeRpgWalkWorld(int tempWorldX, int tempWorldY, String town, String spawn) {
         cmd.rpgXaY[0] = tempWorldX;
-        cmd.rpgXaY[0] = tempWorldY;
+        cmd.rpgXaY[1] = tempWorldY;
         for (int i = 1; i <= tempWorldX; i++) {
             for (int j = 1; j <= tempWorldY; j++) {
                 String tempWorldXY = tempWorldX + "_" + tempWorldY;

@@ -72,7 +72,7 @@ public class RpgCommand extends CommandExecutor {
                     case "north":
                         util.makeRpgWalk(sender, commandArgu[2], channel);
                         break;
-                    case "vest":
+                    case "west":
                         util.makeRpgWalk(sender, commandArgu[2], channel);
                         break;
                     case "south":
@@ -82,7 +82,7 @@ public class RpgCommand extends CommandExecutor {
                         util.makeRpgWalk(sender, commandArgu[2], channel);
                         break;
                     default:
-                        bot.sendMessage(channel, "Try north, vest, south or east");
+                        bot.sendMessage(channel, "Try north, west, south or east");
                 }
                 break;
             case "info":
