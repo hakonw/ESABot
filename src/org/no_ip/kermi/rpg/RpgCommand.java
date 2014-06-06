@@ -15,7 +15,7 @@ public class RpgCommand extends CommandExecutor {
     public HashMap<String, String> hmPOStown;
     public String[] rpgIDS;
     public String[] rpgPOS;
-    public int[] rpgXaY={0,0};
+    public int[] rpgXaY = { 0, 0 };
 
     public RpgCommand(ESABot bot) {
         super(bot);
@@ -29,7 +29,7 @@ public class RpgCommand extends CommandExecutor {
 
     @Override
     public void execute(String channel, String sender, String login, String hostname, String command, boolean pm) {
-        
+
         System.out.println(command);
         String[] commandArgu = command.split(" ");
         switch (commandArgu[1]) {
@@ -68,7 +68,7 @@ public class RpgCommand extends CommandExecutor {
                 util.makeRpgReg(sender, channel);
                 break;
             case "walk":
-                switch(commandArgu[2]){
+                switch (commandArgu[2]) {
                     case "north":
                         util.makeRpgWalk(sender, commandArgu[2], channel);
                         break;
@@ -130,7 +130,7 @@ public class RpgCommand extends CommandExecutor {
             default:
                 bot.sendMessage(channel, "Unknown command, you could try '.rpg help'.");
         }
-        if(commandArgu[1]==null){
+        if (commandArgu[1] == null) {
             bot.sendMessage(channel, "You could try  .rpg help   ");
         }
     }
