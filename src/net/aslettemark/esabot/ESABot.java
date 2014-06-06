@@ -6,6 +6,7 @@ import java.util.HashMap;
 import net.aslettemark.esabot.command.*;
 
 import org.jibble.pircbot.PircBot;
+import org.no_ip.kermi.rpg.RpgCommand;
 
 public class ESABot extends PircBot {
     
