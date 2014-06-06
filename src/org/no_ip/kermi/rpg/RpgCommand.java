@@ -71,6 +71,17 @@ public class RpgCommand extends CommandExecutor {
                 break;
             case "cheat":
                 switch (commandArgu[2]) {
+<<<<<<< HEAD
+=======
+                    case "value":
+                        if (commandArgu[3].isEmpty()) {
+                            bot.sendMessage(channel, "Syntax error use <.rpg cheat value 'name'>");
+                        } else {
+                            util.makeRpgCheatValues(commandArgu[3], channel);
+                        }
+                        break;
+
+>>>>>>> b0e8d0e283d1898148416807bab043b334fd87db
                     case "reset":
                         if (commandArgu[3].isEmpty()) {
                             bot.sendMessage(channel, "Syntax error use <.rpg cheat reset 'name'>");
