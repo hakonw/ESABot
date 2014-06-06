@@ -31,25 +31,30 @@ public class RpgCommand extends CommandExecutor {
                 break;
 
             case "attack":
-                if(RpgID[hmID.get(sender)][0]==1){
-                        switch(commandArgu[3]){
-                        
-                            case "fist":
-                                util.makeRpgAttack(sender, commandArgu[2], commandArgu[3], 3, 1, channel);
-                                break;
-                                
-                            case "fireball":
-                                util.makeRpgAttack(sender, commandArgu[2], commandArgu[3], 6, 3, channel);
-                                break;
-                                
-                            case "heal":
-                                util.makeRpgAttack(sender, commandArgu[2], commandArgu[3], -6, 2, channel);
-                                
-                            default:
-                                bot.sendMessage(channel, "That aint an attack.");
-                        }
-                    
-                }else{
+                if (RpgID[hmID.get(sender)][0] == 1) {
+                    switch (commandArgu[3]) {
+
+                        case "fist":
+                            util.makeRpgAttack(sender, commandArgu[2], commandArgu[3], 3, 1, channel);
+                            break;
+
+                        case "fireball":
+                            util.makeRpgAttack(sender, commandArgu[2], commandArgu[3], 6, 3, channel);
+                            break;
+
+                        case "heal":
+                            util.makeRpgAttack(sender, commandArgu[2], commandArgu[3], -6, 2, channel);
+                            break;
+                            
+                        case "death":
+                            util.makeRpgAttack(sender, commandArgu[2], commandArgu[3], 20, 0, channel);
+                            break;
+
+                        default:
+                            bot.sendMessage(channel, "That aint an attack.");
+                    }
+
+                } else {
                     bot.sendMessage(channel, "It looks like you're dead");
                 }
                 break;
@@ -63,25 +68,25 @@ public class RpgCommand extends CommandExecutor {
                 break;
 
             case "cheat":
-                switch(commandArgu[2]){
-                    
+                switch (commandArgu[2]) {
+
                     case "value":
-                        if(commandArgu[3].isEmpty()){
+                        if (commandArgu[3].isEmpty()) {
                             bot.sendMessage(channel, "Syntax error use <.rpg cheat value 'name'>");
-                        }else{
-                        util.MakeRpgCheatValues(commandArgu[3], channel);
+                        } else {
+                            util.MakeRpgCheatValues(commandArgu[3], channel);
                         }
                         break;
-                    
+
                     case "reset":
-                        if(commandArgu[3].isEmpty()){
+                        if (commandArgu[3].isEmpty()) {
                             bot.sendMessage(channel, "Syntax error use <.rpg cheat reset 'name'>");
-                        }else{
-                        util.MakeRpgRegVal(commandArgu[3], channel);
-                        bot.sendMessage(channel, "Done with reset to " + commandArgu[3]);
+                        } else {
+                            util.MakeRpgRegVal(commandArgu[3], channel);
+                            bot.sendMessage(channel, "Done with reset to " + commandArgu[3]);
                         }
                         break;
-                        
+
                     case "portal":
                         bot.sendMessage(channel, "I'm doing Science and I'm still alive.");
                         bot.sendMessage(channel, "I feel FANTASTIC and I'm still alive.");
@@ -91,6 +96,10 @@ public class RpgCommand extends CommandExecutor {
                         bot.sendMessage(channel, "STILL ALIVE");
                         break;
                         
+                    case "update":
+                        util.makeRpgUpdate(commandArgu[3], channel);
+                        break;
+
                     default:
                         bot.sendMessage(channel, "That is not a cheat.");
                 }
