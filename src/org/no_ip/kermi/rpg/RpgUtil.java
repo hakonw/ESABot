@@ -4,8 +4,8 @@ import net.aslettemark.esabot.ESABot;
 
 public class RpgUtil {
 
-    ESABot bot;
-    RpgCommand cmd;
+    protected ESABot bot;
+    public RpgCommand cmd;
 
     public RpgUtil(ESABot bot, RpgCommand c) {
         this.bot = bot;
@@ -14,35 +14,35 @@ public class RpgUtil {
 
     public void makeRpgUpdate(String sender, String channel) {
         for (int i = 0; i <= cmd.hmID.size(); i++) {
-            int tempLiv = cmd.RpgID[i][1];
+            int tempLiv = cmd.rpgID[i][1];
             if (tempLiv <= 0) {
-                cmd.RpgID[i][0] = 0;
-                bot.sendMessage(channel, cmd.RpgIDS[i] + " is dead. RIP IN PEACE!");
+                cmd.rpgID[i][0] = 0;
+                bot.sendMessage(channel, cmd.rpgIDS[i] + " is dead. RIP IN PEACE!");
             }
         }
     }
 
     public void makeRpgAttack(String sender, String receiver, String spell, int damage, int stamina, String channel) {
         int tempRpgId = cmd.hmID.get(sender);
-        if (!(cmd.hmID.get(sender) == null)) { //idk int tempRpgId funka ikke her
-            if (!(cmd.hmID.get(sender) == null)) { // eller her
-                if (cmd.RpgID[tempRpgId][2] >= stamina) {
-                    int tempRpgStamina = cmd.RpgID[tempRpgId][2];
-                    int tempRpgHp = cmd.RpgID[tempRpgId][1];
+        if (!(cmd.hmID.get(sender) == null)) {
+            if (!(cmd.hmID.get(sender) == null)) {
+                if (cmd.rpgID[tempRpgId][2] >= stamina) {
+                    final int tempRpgStamina = cmd.rpgID[tempRpgId][2];
+                    final int tempRpgHp = cmd.rpgID[tempRpgId][1];
 
-                    cmd.RpgID[tempRpgId][2] = tempRpgStamina - stamina;
-                    cmd.RpgID[tempRpgId][1] = tempRpgHp - damage;
+                    cmd.rpgID[tempRpgId][2] = tempRpgStamina - stamina;
+                    cmd.rpgID[tempRpgId][1] = tempRpgHp - damage;
 
                     bot.sendMessage(channel, sender + " took " + damage + " hp to " + receiver + " with his " + spell + " and lost " + stamina + " stamina.");
                     makeRpgUpdate(sender, channel);
                 } else {
-                    bot.sendMessage(channel, "It looks like you're out of stamina " + cmd.RpgID[tempRpgId][2] + "/" + stamina);
+                    bot.sendMessage(channel, "It looks like you're out of stamina " + cmd.rpgID[tempRpgId][2] + "/" + stamina);
                 }
             } else {
-                bot.sendMessage(channel, receiver + " aint a guy.");
+                bot.sendMessage(channel, receiver + " ain't a guy.");
             }
         } else {
-            bot.sendMessage(channel, "You're not registerd, use '.rpg reg'.");
+            bot.sendMessage(channel, "You're not registered, use '.rpg init'.");
         }
     }
 
@@ -59,15 +59,15 @@ public class RpgUtil {
     public void MakeRpgRegVal(String sender, String channel) {
         int tempIdVal = cmd.hmID.get(sender);
 
-        cmd.RpgID[tempIdVal][0] = 1; // liv
-        cmd.RpgID[tempIdVal][1] = 20; // hp
-        cmd.RpgID[tempIdVal][2] = 12; // stamina
+        cmd.rpgID[tempIdVal][0] = 1; // liv
+        cmd.rpgID[tempIdVal][1] = 20; // hp
+        cmd.rpgID[tempIdVal][2] = 12; // stamina
     }
 
     public void MakeRpgCheatValues(String sender, String channel) {
         int tempValue[] = new int[3];
         for (int i = 0; i <= 2; i++) {
-            tempValue[i] = cmd.RpgID[cmd.hmID.get(sender)][i];
+            tempValue[i] = cmd.rpgID[cmd.hmID.get(sender)][i];
         }
         bot.sendMessage(channel, "Alive = " + tempValue[0] + ", hp = " + tempValue[1] + ", stamina = " + tempValue[2] + ".");
     }
