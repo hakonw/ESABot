@@ -12,19 +12,25 @@ public class RpgCommand extends CommandExecutor {
     public RpgUtil util;
     public int[][] rpgID;
     public HashMap<String, Integer> hmID;
+    public HashMap<String, String> hmPOStown;
     public String[] rpgIDS;
+    public String[] rpgPOS;
+    public int[] rpgXaY={0,0};
 
     public RpgCommand(ESABot bot) {
         super(bot);
         this.util = new RpgUtil(bot, this);
-        this.rpgID = new int[10][5];
+        this.rpgID = new int[10][3];
         this.hmID = new HashMap<String, Integer>();
+        this.hmPOStown = new HashMap<String, String>();
         this.rpgIDS = new String[10];
+        this.rpgPOS = new String[10];
     }
 
     @Override
     public void execute(String channel, String sender, String login, String hostname, String command, boolean pm) {
-
+        
+        System.out.println(command);
         String[] commandArgu = command.split(" ");
         switch (commandArgu[1]) {
             case "help":
@@ -48,6 +54,9 @@ public class RpgCommand extends CommandExecutor {
                         case "death": //will be removed
                             util.makeRpgAttack(sender, commandArgu[2], commandArgu[3], 30, 0, channel, false);
                             break;
+                        case "fish":
+                            util.makeRpgAttack(sender, commandArgu[2], commandArgu[3], 1, 0, channel, false);
+                            break;
                         default:
                             bot.sendMessage(channel, "That aint an attack.");
                     }
@@ -59,8 +68,22 @@ public class RpgCommand extends CommandExecutor {
                 util.makeRpgReg(sender, channel);
                 break;
             case "walk":
-                util.makeRpgWalk();
-                bot.sendMessage(channel, "Walk is not implemented yet");
+                switch(commandArgu[2]){
+                    case "north":
+                        util.makeRpgWalk(sender, commandArgu[2], channel);
+                        break;
+                    case "vest":
+                        util.makeRpgWalk(sender, commandArgu[2], channel);
+                        break;
+                    case "south":
+                        util.makeRpgWalk(sender, commandArgu[2], channel);
+                        break;
+                    case "east":
+                        util.makeRpgWalk(sender, commandArgu[2], channel);
+                        break;
+                    default:
+                        bot.sendMessage(channel, "Try north, vest, south or east");
+                }
                 break;
             case "info":
                 if (commandArgu[2].isEmpty()) {
@@ -93,6 +116,12 @@ public class RpgCommand extends CommandExecutor {
                     case "update":
                         util.makeRpgUpdate(commandArgu[3], channel);
                         break;
+                    case "world3":
+                        util.makeRpgWalkWorld(3, 3, commandArgu[3], "2_2");
+                        break;
+                    case "world5":
+                        util.makeRpgWalkWorld(5, 5, commandArgu[3], "3_3");
+                        break;
                     default:
                         bot.sendMessage(channel, "That is not a cheat.");
                 }
@@ -100,6 +129,9 @@ public class RpgCommand extends CommandExecutor {
 
             default:
                 bot.sendMessage(channel, "Unknown command, you could try '.rpg help'.");
+        }
+        if(commandArgu[1]==null){
+            bot.sendMessage(channel, "You could try  .rpg help   ");
         }
     }
 }
