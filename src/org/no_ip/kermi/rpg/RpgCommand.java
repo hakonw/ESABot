@@ -15,7 +15,7 @@ public class RpgCommand extends CommandExecutor {
     public HashMap<String, String> hmPOStown;
     public String[] rpgIDS;
     public String[] rpgPOS;
-    public int[] rpgXaY = { 0, 0 };
+    public int[] rpgXaY = { 1, 1 };
 
     public RpgCommand(ESABot bot) {
         super(bot);
@@ -25,6 +25,7 @@ public class RpgCommand extends CommandExecutor {
         this.hmPOStown = new HashMap<String, String>();
         this.rpgIDS = new String[10];
         this.rpgPOS = new String[10];
+
     }
 
     @Override
@@ -117,10 +118,21 @@ public class RpgCommand extends CommandExecutor {
                         util.makeRpgUpdate(commandArgu[3], channel);
                         break;
                     case "world3":
-                        util.makeRpgWalkWorld(3, 3, commandArgu[3], "2_2");
+                        util.makeRpgWalkWorld(3, 3, commandArgu[3], "2_2", channel);
                         break;
                     case "world5":
-                        util.makeRpgWalkWorld(5, 5, commandArgu[3], "3_3");
+                        util.makeRpgWalkWorld(5, 5, commandArgu[3], "3,3", channel);
+                        break;
+                    case "world_c":
+                        int tempX = Integer.parseInt(commandArgu[3]);
+                        int tempY = Integer.parseInt(commandArgu[4]);
+                        util.makeRpgWalkWorld(tempX, tempY, commandArgu[5], commandArgu[6], channel);
+                        break;
+                    case "world_spawn":
+                        util.makeRpgWalkSpawn(commandArgu[3], channel);
+                        break;
+                    case "world_pos":
+                        util.makeRpgWalkPos(commandArgu[3], channel);
                         break;
                     default:
                         bot.sendMessage(channel, "That is not a cheat.");

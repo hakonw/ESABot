@@ -39,7 +39,7 @@ public class RpgUtil {
         if (!(cmd.hmID.get(sender) == null)) {
             if (!(cmd.hmID.get(receiver) == null)) {
                 if (cmd.rpgID[tempRpgId][2] >= stamina) {
-                    if (cmd.rpgID[cmd.hmID.get(receiver)][1] >= 0 || heal) {
+                    if (cmd.rpgID[cmd.hmID.get(receiver)][1] > 0 || heal) {
                         final int tempRpgStamina = cmd.rpgID[tempRpgId][2];
                         final int tempRpgHp = cmd.rpgID[tempRpgId][1];
 
@@ -82,7 +82,7 @@ public class RpgUtil {
         cmd.rpgID[tempIdVal][0] = 1; // liv
         cmd.rpgID[tempIdVal][1] = 20; // hp
         cmd.rpgID[tempIdVal][2] = 12; // stamina
-        cmd.rpgPOS[tempIdVal] = "2_2";
+        cmd.rpgPOS[tempIdVal] = "1_1";
     }
 
     public void makeRpgCheatValues(String sender, String channel) {
@@ -94,32 +94,41 @@ public class RpgUtil {
     }
 
     public void makeRpgHelp(String channel) {
-        bot.sendMessage(channel, "Help_Commands: help, init, attack <player> <method>, info <player>, cheat <cheat>");
+        bot.sendMessage(channel, "Help_Commands: help, init, attack <player> <method>, info <player>, cheat <cheat>, walk <direction>");
     }
 
     public void makeRpgWalk(String sender, String direction, String channel) {
 
-        String[] tempXaY = cmd.rpgPOS[cmd.hmID.get(sender)].split("_");
-        int tempX = Integer.parseInt(tempXaY[0]);
-        int tempY = Integer.parseInt(tempXaY[1]);
-        if ((direction.equalsIgnoreCase("north") && tempX == cmd.rpgXaY[0]) || (direction.equalsIgnoreCase("west") && tempY == cmd.rpgXaY[0]) || (direction.equalsIgnoreCase("south") && tempX == cmd.rpgXaY[1]) || (direction.equalsIgnoreCase("east") && tempY == cmd.rpgXaY[1])) {
+        String[] tempRXaY = cmd.rpgPOS[cmd.hmID.get(sender)].split("_");
+        int tempID = cmd.hmID.get(sender);
+        int tempX = Integer.parseInt(tempRXaY[0]);
+        int tempY = Integer.parseInt(tempRXaY[1]);
+        if ((direction.equalsIgnoreCase("north") && tempX <= 1) || (direction.equalsIgnoreCase("west") && tempY <= 1) || (direction.equalsIgnoreCase("south") && tempX >= cmd.rpgXaY[0]) || (direction.equalsIgnoreCase("east") && tempY >= cmd.rpgXaY[1])) {
             bot.sendMessage(channel, "You cannot move this way, you're on the edge of the world.");
+            System.out.println(tempX + " tempX==MaxX " + cmd.rpgXaY[0]);
+            System.out.println(tempY + " tempY==MaxY " + cmd.rpgXaY[1]);
         } else {
             if (direction.equalsIgnoreCase("north")) {
-                cmd.rpgPOS[cmd.hmID.get(sender)] = tempX - 1 + "_" + tempY;
+                tempX--;
+                cmd.rpgPOS[tempID] = tempX + "_" + tempY;
             } else if (direction.equalsIgnoreCase("west")) {
                 tempY--;
-                cmd.rpgPOS[cmd.hmID.get(sender)] = tempX + "_" + tempY;
+                cmd.rpgPOS[tempID] = tempX + "_" + tempY;
             } else if (direction.equalsIgnoreCase("south")) {
-                cmd.rpgPOS[cmd.hmID.get(sender)] = tempX + 1 + "_" + tempY;
+                tempX++;
+                cmd.rpgPOS[tempID] = tempX + "_" + tempY;
             } else if (direction.equalsIgnoreCase("east")) {
-                cmd.rpgPOS[cmd.hmID.get(sender)] = tempX + "_" + tempY + 1;
+                tempY++;
+                cmd.rpgPOS[tempID] = tempX + "_" + tempY;
             }
             bot.sendMessage(channel, "You moved " + direction + ".");
+            System.out.println(tempX + " tempX==MaxX " + cmd.rpgXaY[0]);
+            System.out.println(tempY + " tempY==MaxY " + cmd.rpgXaY[1]);
+
         }
     }
 
-    public void makeRpgWalkWorld(int tempWorldX, int tempWorldY, String town, String spawn) {
+    public void makeRpgWalkWorld(int tempWorldX, int tempWorldY, String town, String spawn, String channel) {
         cmd.rpgXaY[0] = tempWorldX;
         cmd.rpgXaY[1] = tempWorldY;
         for (int i = 1; i <= tempWorldX; i++) {
@@ -127,9 +136,21 @@ public class RpgUtil {
                 String tempWorldXY = tempWorldX + "_" + tempWorldY;
                 cmd.hmPOStown.put(tempWorldXY, "forest");
             }
-            String tempWorldTown = "town_" + town;
-            cmd.hmPOStown.put(spawn, tempWorldTown);
         }
+        String tempWorldTown = "town_" + town;
+        cmd.hmPOStown.put(spawn, tempWorldTown);
+        bot.sendMessage(channel, "X/Y/Town = " + tempWorldX + "/" + tempWorldY + "/" + town);
+
+    }
+
+    public void makeRpgWalkSpawn(String sender, String channel) {
+        int tempSpawnY = (cmd.rpgXaY[1] / 2) + 1;
+        cmd.rpgPOS[cmd.hmID.get(sender)] = (cmd.rpgXaY[0] / 2) + 1 + "_" + tempSpawnY;
+        bot.sendMessage(channel, sender + " has been moved to " + cmd.rpgPOS[cmd.hmID.get(sender)]);
+    }
+
+    public void makeRpgWalkPos(String sender, String channel) {
+        bot.sendMessage(channel, cmd.rpgPOS[cmd.hmID.get(sender)]);
     }
 
 }
